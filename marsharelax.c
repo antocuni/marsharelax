@@ -239,11 +239,11 @@ w_object(PyObject *v, WFILE *p)
             w_long(x, p);
         }
     }
-    else if (PyLong_CheckExact(v)) {
+    else if (PyLong_Check(v)) {
         PyLongObject *ob = (PyLongObject *)v;
         w_PyLong(ob, p);
     }
-    else if (PyFloat_CheckExact(v)) {
+    else if (PyFloat_Check(v)) {
         if (p->version > 1) {
             unsigned char buf[8];
             if (_PyFloat_Pack8(PyFloat_AsDouble(v),
@@ -269,7 +269,7 @@ w_object(PyObject *v, WFILE *p)
         }
     }
 #ifndef WITHOUT_COMPLEX
-    else if (PyComplex_CheckExact(v)) {
+    else if (PyComplex_Check(v)) {
         if (p->version > 1) {
             unsigned char buf[8];
             if (_PyFloat_Pack8(PyComplex_RealAsDouble(v),
@@ -312,7 +312,7 @@ w_object(PyObject *v, WFILE *p)
         }
     }
 #endif
-    else if (PyString_CheckExact(v)) {
+    else if (PyString_Check(v)) {
         if (p->strings && PyString_CHECK_INTERNED(v)) {
             PyObject *o = PyDict_GetItem(p->strings, v);
             if (o) {
@@ -343,7 +343,7 @@ w_object(PyObject *v, WFILE *p)
         w_string(PyString_AS_STRING(v), n, p);
     }
 #ifdef Py_USING_UNICODE
-    else if (PyUnicode_CheckExact(v)) {
+    else if (PyUnicode_Check(v)) {
         PyObject *utf8;
         utf8 = PyUnicode_AsUTF8String(v);
         if (utf8 == NULL) {
@@ -358,7 +358,7 @@ w_object(PyObject *v, WFILE *p)
         Py_DECREF(utf8);
     }
 #endif
-    else if (PyTuple_CheckExact(v)) {
+    else if (PyTuple_Check(v)) {
         w_byte(TYPE_TUPLE, p);
         n = PyTuple_Size(v);
         W_SIZE(n, p);
@@ -366,7 +366,7 @@ w_object(PyObject *v, WFILE *p)
             w_object(PyTuple_GET_ITEM(v, i), p);
         }
     }
-    else if (PyList_CheckExact(v)) {
+    else if (PyList_Check(v)) {
         w_byte(TYPE_LIST, p);
         n = PyList_GET_SIZE(v);
         W_SIZE(n, p);
@@ -374,7 +374,7 @@ w_object(PyObject *v, WFILE *p)
             w_object(PyList_GET_ITEM(v, i), p);
         }
     }
-    else if (PyDict_CheckExact(v)) {
+    else if (PyDict_Check(v)) {
         Py_ssize_t pos;
         PyObject *key, *value;
         w_byte(TYPE_DICT, p);
@@ -386,7 +386,7 @@ w_object(PyObject *v, WFILE *p)
         }
         w_object((PyObject *)NULL, p);
     }
-    else if (PyAnySet_CheckExact(v)) {
+    else if (PyAnySet_Check(v)) {
         PyObject *value, *it;
 
         if (PyObject_TypeCheck(v, &PySet_Type))
