@@ -224,7 +224,7 @@ w_object(PyObject *v, WFILE *p)
     else if (v == Py_True) {
         w_byte(TYPE_TRUE, p);
     }
-    else if (PyInt_CheckExact(v)) {
+    else if (PyInt_Check(v)) {
         long x = PyInt_AS_LONG((PyIntObject *)v);
 #if SIZEOF_LONG > 4
         long y = Py_ARITHMETIC_RIGHT_SHIFT(long, x, 31);
@@ -1400,9 +1400,9 @@ loads() -- read value from a string");
 
 
 PyMODINIT_FUNC
-PyMarshal_Init(void)
+initmarsharelax(void)
 {
-    PyObject *mod = Py_InitModule3("marshal", marshal_methods,
+    PyObject *mod = Py_InitModule3("marsharelax", marshal_methods,
         marshal_doc);
     if (mod == NULL)
         return;
