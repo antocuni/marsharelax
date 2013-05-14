@@ -1201,8 +1201,8 @@ set_error(int error)
     }
 }
 
-PyObject *
-PyMarshal_WriteObjectToString(PyObject *x, int version)
+static PyObject *
+xPyMarshal_WriteObjectToString(PyObject *x, int version)
 {
     WFILE wf;
     wf.fp = NULL;
@@ -1321,7 +1321,7 @@ marshal_dumps(PyObject *self, PyObject *args)
     int version = Py_MARSHAL_VERSION;
     if (!PyArg_ParseTuple(args, "O|i:dumps", &x, &version))
         return NULL;
-    return PyMarshal_WriteObjectToString(x, version);
+    return xPyMarshal_WriteObjectToString(x, version);
 }
 
 PyDoc_STRVAR(dumps_doc,
